@@ -21,7 +21,6 @@ try:
                     print_error,
                     print_summary,
                 )
-    from typing import Any
     import json
     import torch
     import os
@@ -72,7 +71,7 @@ def main() -> None:
     """
     args = parse_args()
 
-    print_banner(version="0.1.0")
+    print_banner(version="0.1.3")
     print_section("Loading input files")
 
     try:
@@ -118,7 +117,7 @@ def main() -> None:
     print(f"        Loaded {len(file_content)} function(s) "
           f"and {len(prompt_command)} prompt(s).")
 
-    FUNCTIONS_BLOCK: str = "" 
+    FUNCTIONS_BLOCK: str = ""
 
     if not args.quiet:
         print_section("Loading model")
@@ -128,10 +127,9 @@ def main() -> None:
                         "Please enter at least 1 right function.")
         else:
             print("No function seen on 'function_definition.json'\n"
-                        "Please enter at least 1 right function.")
+                  "Please enter at least 1 right function.")
         sys.exit(1)
-
-    if len(result_ftcall_test) ==0:
+    if len(result_ftcall_test) == 0:
         if not args.quiet:
             print_error("No prompt seen on 'function_calling_tests.json'\n"
                         "Please enter at least 1 prompt.")
@@ -140,7 +138,6 @@ def main() -> None:
                         "Please enter at least 1 prompt.")
 
         sys.exit(1)
-
     instance = Small_LLM_Model()
     instance_vocab = IDTokenTransformation(instance)
 

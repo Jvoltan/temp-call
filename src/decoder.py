@@ -215,7 +215,7 @@ def build_states(function_def: FunctionDefinition) -> list[DecoderState]:
         states.append(ForcedTextState(prefix))
         value_type = param.param_types.value
         if value_type == "integer":
-            value_type = "number"
+            value_type = "integer"
         if value_type == "string":
             states.append(ForcedTextState('"'))
         states.append(ValueState(name, value_type))
