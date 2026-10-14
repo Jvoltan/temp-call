@@ -34,7 +34,7 @@ The program reads two files in `data/input/`:
 - `functions_definition.json`: the functions it can call
 - `function_calling_tests.json`: the sentences to convert
 
-It handles every sentence and writes all the results to `data/output/function_calls.json`.
+It handles every sentence and writes all the results to `data/output/function_calling_results.json`.
 
 ### Options
 
@@ -44,7 +44,7 @@ You can choose other files with `uv run python -m src [options]`:
 |---|---|---|
 | `--functions_definition <file>` | `data/input/functions_definition.json` | The functions it can call |
 | `--input <file>` | `data/input/function_calling_tests.json` | The sentences to convert |
-| `--output <file>` | `data/output/function_calls.json` | Where the results are written |
+| `--output <file>` | `data/output/function_calling_results.json` | Where the results are written |
 | `--quiet` | off | No decoration: print only the JSON on the screen |
 
 Example:
@@ -53,7 +53,7 @@ Example:
 uv run python -m src \
   --functions_definition data/input/functions_definition.json \
   --input data/input/function_calling_tests.json \
-  --output data/output/function_calls.json
+  --output data/output/function_calling_results.json
 ```
 
 If an input file is missing or is not valid JSON, the program prints a clear error message and stops with exit code 1.
@@ -181,7 +181,7 @@ Input (`data/input/function_calling_tests.json`):
 ]
 ```
 
-Expected result in `data/output/function_calls.json`:
+Expected result in `data/output/function_calling_results.json`:
 
 | Prompt | Function | Parameters |
 |---|---|---|
