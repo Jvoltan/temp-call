@@ -118,117 +118,29 @@ def main() -> None:
     print(f"        Loaded {len(file_content)} function(s) "
           f"and {len(prompt_command)} prompt(s).")
 
-    def dict_to_str(prompt: list[dict[str, str]]) -> str:
-        """Combine function definitions and prompts into a single string.
-
-        Args:
-            prompt: Parsed contents of ``function_calling_tests.json``.
-
-        Returns:
-            A single string listing every function declaration followed by
-            every prompt, ready to be tokenised and fed to the LLM.
-        """
-        text = ""
-        reg = FunctionRegistration(file_content)
-
-        class Registration:
-            """Render function definitions into a flat textual description.
-
-            Attributes:
-                func_registration: Registry providing per-function lookups.
-                function_name: Names of all registered functions.
-                text: Accumulated textual description.
-            """
-            def __init__(self, reg: FunctionRegistration = reg) -> None:
-                """Initialise the renderer.
-
-                Args:
-                    reg: Registry of function definitions to render.
-                """
-                self.func_registration = reg
-                self.function_name = self.func_registration.get_all_functions()
-                self.text: str = ""
-
-            def _name(self, info: str) -> Any:
-                """Return the name of the function identified by ``info``.
-
-                Args:
-                    info: The function name.
-
-                Returns:
-                    The same name, fetched through the registry.
-                """
-                return self.func_registration.get_function(info).name
-
-            def _description(self, info: str) -> Any:
-                """Return description of the function identified by ``info``.
-
-                Args:
-                    info: The function name.
-
-                Returns:
-                    The function's human-readable description.
-                """
-                return self.func_registration.get_function(info).description
-
-            def _parameter(self, info: str) -> str:
-                """Render the parameter block of one function.
-
-                Args:
-                    info: The function name.
-
-                Returns:
-                    A multi-line string with one ``- name: (type)`` entry per
-                    parameter.
-                """
-                _parameter: dict[str, dict[str, str]] = \
-                    self.func_registration.get_function(info).parameters
-                param_val: str = ""
-                for key, value in _parameter.items():
-                    for v in value.values():
-                        param_val += f"- {key}: ({v})\n"
-                return param_val
-
-            def _returns(self, info: str) -> str:
-                """Render the return type of one function.
-
-                Args:
-                    info: The function name.
-
-                Returns:
-                    A string of the form ``Returns: (type)``.
-                """
-                _returns: dict[str, Any] = \
-                    self.func_registration.get_function(info).returns
-                ret_val: str = ""
-                for value in _returns.values():
-                    ret_val = f"Returns: ({value})"
-                return ret_val
-
-            def pilot(self) -> str:
-                """Render every registered function into ``self.text``.
-
-                Returns:
-                    The accumulated multi-function description.
-                """
-                for function in self.function_name:
-                    self.text += f"{self._name(function)}: " \
-                        f"{self._description(function)}\n" \
-                        f"Parameter(s):\n{self._parameter(function)}" \
-                        f"{self._returns(function)}\n\n"
-                return self.text
-        declaration = Registration()
-        text = declaration.pilot()
-
-        for prompt_list in prompt:
-            for value in prompt_list.values():
-                text += f"Prompt: {value}\n"
-
-        return text
-    FUNCTIONS_BLOCK: str = dict_to_str([])
+    FUNCTIONS_BLOCK: str = "" 
 
     if not args.quiet:
         print_section("Loading model")
+    if len(file_content) == 0:
+        if not args.quiet:
+            print_error("No function seen on 'function_definition.json'\n"
+                        "Please enter at least 1 right function.")
+        else:
+            print("No function seen on 'function_definition.json'\n"
+                        "Please enter at least 1 right function.")
+        sys.exit(1)
+
+    if len(result_ftcall_test) ==0:
+        if not args.quiet:
+            print_error("No prompt seen on 'function_calling_tests.json'\n"
+                        "Please enter at least 1 prompt.")
+        else:
+            print_error("No prompt seen on 'function_calling_tests.json'\n"
+                        "Please enter at least 1 prompt.")
+
+        sys.exit(1)
+
     instance = Small_LLM_Model()
     instance_vocab = IDTokenTransformation(instance)
 
