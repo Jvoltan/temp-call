@@ -1,7 +1,7 @@
 *This project has been created as part of the 42 curriculum by jraveloa.*
 
 # Call_Me_Maybe
-
+![Call_Me_Maybe general visualisation](image/call_me_maybe_preview.png)
 ## Description
 
 Small language models are bad at writing JSON. Often the output is broken.
